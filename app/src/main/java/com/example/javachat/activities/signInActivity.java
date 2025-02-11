@@ -3,6 +3,7 @@ package com.example.javachat.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,6 +13,10 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.javachat.R;
 import com.example.javachat.databinding.ActivitySignInBinding;
+import com.google.firebase.Firebase;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
 
 public class signInActivity extends AppCompatActivity {
 
@@ -29,4 +34,5 @@ public class signInActivity extends AppCompatActivity {
         binding.txtCreateNewAccount.setOnClickListener(v ->
                 startActivity(new Intent(getApplicationContext(), signUpActivity.class)));
     }
+
 }

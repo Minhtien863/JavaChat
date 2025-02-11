@@ -13,6 +13,7 @@ android {
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
+        multiDexEnabled = true
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -36,21 +37,20 @@ android {
 }
 
 dependencies {
-    // Import the Firebase BoM
-    implementation(libs.firebase.bom)
-    implementation (libs.firebase.messaging)
-
-    // TODO: Add the dependencies for Firebase products you want to use
-    // When using the BoM, don't specify versions in Firebase dependencies
-    // https://firebase.google.com/docs/android/setup#available-librarie
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
     implementation(libs.firebase.messaging)
+    implementation(libs.firebase.firestore)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+
+    // Firebase
+    implementation(libs.firebase.bom)
+    implementation (libs.firebase.messaging)
+    implementation (libs.firebase.firestore)
 
     // Scalable size unit
     implementation(libs.sdp.android)
@@ -58,4 +58,7 @@ dependencies {
 
     // Rounded ImageView
     implementation(libs.roundedimageview)
+
+    // MultiDex
+    implementation(libs.multidex)
 }
