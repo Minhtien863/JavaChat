@@ -10,4 +10,6 @@
     <string name="confirm_password">Confirm Password</string>
     <string name="sign_up">Sign Up</string>
     <string name="welcome_back">Welcome Back</string>
+    <string name="doan_chat">Đoạn chat</string>
+    <string name="type_a_message">Nhắn tin</string>
 </resources>
