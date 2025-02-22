@@ -51,6 +51,7 @@ dependencies {
     implementation(libs.firebase.bom)
     implementation (libs.firebase.messaging)
     implementation (libs.firebase.firestore)
+    implementation ("com.google.firebase:firebase-admin:9.4.3")
 
     // Scalable size unit
     implementation(libs.sdp.android)

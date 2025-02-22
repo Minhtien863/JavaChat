@@ -1,12 +1,16 @@
 package com.example.javachat.activities;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Base64;
 import android.view.View;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 
 import com.example.javachat.adapter.RecentConversationsAdapter;
 import com.example.javachat.databinding.ActivityMainBinding;
@@ -75,7 +79,7 @@ public class MainActivity extends BaseActivity implements ConversionListener {
         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
     }
 
-    private void listenConversion(){
+    private void listenConversion() {
         db.collection(Constants.KEY_COLLECTION_CONVERSATIONS)
                 .whereEqualTo(Constants.KEY_SENDER_ID, preferenceManager.getString(Constants.KEY_USER_ID))
                 .addSnapshotListener(eventListener);
@@ -120,7 +124,7 @@ public class MainActivity extends BaseActivity implements ConversionListener {
                     }
                 }
             }
-            Collections.sort(conversations, (obj1,ojb2)-> ojb2.dateOject.compareTo(obj1.dateOject));
+            Collections.sort(conversations, (obj1, ojb2) -> ojb2.dateOject.compareTo(obj1.dateOject));
             conversationsAdapter.notifyDataSetChanged();
             binding.conversationsRecyclerView.smoothScrollToPosition(0);
             binding.conversationsRecyclerView.setVisibility(View.VISIBLE);
@@ -129,10 +133,17 @@ public class MainActivity extends BaseActivity implements ConversionListener {
     };
 
     private void getToken() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) { // Android 13+
+            if (checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{android.Manifest.permission.POST_NOTIFICATIONS}, 1);
+                return;
+            }
+        }
         FirebaseMessaging.getInstance().getToken().addOnSuccessListener(this::updateToken);
     }
 
     private void updateToken(String token) {
+        preferenceManager.putString(Constants.KEY_FCM_TOKEN, token);
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference documentReference = db.collection(Constants.KEY_COLLECTION_USERS)
                 .document(preferenceManager.getString(Constants.KEY_USER_ID)
@@ -161,5 +172,13 @@ public class MainActivity extends BaseActivity implements ConversionListener {
         Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
         intent.putExtra(Constants.KEY_USER, user);
         startActivity(intent);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 1 && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            getToken();
+        }
     }
 }
