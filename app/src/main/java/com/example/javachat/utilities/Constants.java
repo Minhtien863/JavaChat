@@ -1,5 +1,7 @@
 package com.example.javachat.utilities;
 
+import java.util.HashMap;
+
 public class Constants {
     public static final String KEY_COLLECTION_USERS = "users";
     public static final String KEY_NAME = "name";
@@ -22,4 +24,9 @@ public class Constants {
     public static final String KEY_SENDER_IMG = "senderImg";
     public static final String KEY_RECEIVER_IMG = "receiverImg";
     public static final String KEY_LAST_MESSAGE = "lastMessage";
+    public static final String KEY_AVAILABILITY = "availability";
+    public static final String REMOTE_MSG_AUTHORIZATION = "Authorization";
+    public static final String REMOTE_MSG_CONTENT_TYPE = "Content-Type";
+
+    public static HashMap<>
 }

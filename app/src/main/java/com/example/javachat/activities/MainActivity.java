@@ -1,6 +1,5 @@
 package com.example.javachat.activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -9,16 +8,11 @@ import android.util.Base64;
 import android.view.View;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-
-
 import com.example.javachat.adapter.RecentConversationsAdapter;
 import com.example.javachat.databinding.ActivityMainBinding;
+import com.example.javachat.listeners.ConversionListener;
 import com.example.javachat.models.ChatMessage;
+import com.example.javachat.models.User;
 import com.example.javachat.utilities.Constants;
 import com.example.javachat.utilities.PreferenceManager;
 import com.google.firebase.firestore.DocumentChange;
@@ -36,7 +30,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity implements ConversionListener {
 
     private ActivityMainBinding binding;
     private PreferenceManager preferenceManager;
@@ -59,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void init() {
         conversations = new ArrayList<>();
-        conversationsAdapter = new RecentConversationsAdapter(conversations);
+        conversationsAdapter = new RecentConversationsAdapter(conversations, this);
         binding.conversationsRecyclerView.setAdapter(conversationsAdapter);
         db = FirebaseFirestore.getInstance();
     }
@@ -160,5 +154,12 @@ public class MainActivity extends AppCompatActivity {
                     finish();
                 })
                 .addOnFailureListener(e -> showToast("Không thể đăng xuất"));
+    }
+
+    @Override
+    public void onConversionClicked(User user) {
+        Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
+        intent.putExtra(Constants.KEY_USER, user);
+        startActivity(intent);
     }
 }
